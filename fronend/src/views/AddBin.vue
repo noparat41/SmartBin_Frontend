@@ -5,24 +5,20 @@
     <v-container>
       <br />
       <br />
-      <v-card id="create" align="center" justify="center" dark > 
+      <v-card id="create" align="center" justify="center" dark>
         <v-container fluid>
           <br />
           <v-col class="d-flex" cols="12" sm="5">
-            <v-text-field
-              label="Name"
-              v-model="HospitalName"
-              :rules="[(v) => !!v || 'Item is required']"
-            ></v-text-field>
+            <v-text-field label="Name" v-model="Name" :rules="[(v) => !!v || 'Item is required']"></v-text-field>
           </v-col>
           <v-row justify="center">
             <v-col class="d-flex" cols="12" sm="4">
               <v-select
-                :items="Location"
+                :items="Locations"
                 label="Location"
-                v-model="HospitalName"
+                v-model="LocationId"
                 item-text="Name"
-                item-value="id"
+                item-value="_id"
                 :rules="[(v) => !!v || 'Item is required']"
                 solo
               ></v-select>
@@ -65,11 +61,12 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+
             </v-col>
           </v-row>
           <v-speed-dial
             v-model="fab"
-            top="true"
+            :top="top"
             :right="right"
             :direction="direction"
             :transition="transition"
@@ -96,10 +93,10 @@
           <v-card-actions>
             <v-row justify="center">
               <div class="text-center">
-                <v-btn rounded color="success" dark large>Seve</v-btn>
+                <v-btn rounded color="success" dark large @click="getLocationByid()">Seve</v-btn>
               </div>
               <div class="text-center">
-                <v-btn text color="success" dark large>cancel</v-btn>
+                <v-btn text color="success" dark large @click="cancel()">cancel</v-btn>
               </div>
             </v-row>
           </v-card-actions>
@@ -118,18 +115,23 @@ export default {
   },
   data: () => ({
     dialogs: false,
-    direction: "left",
+    direction: "bottom",
     fab: false,
     fling: false,
     tabs: null,
+    top: true,
+    left: true,
     right: true,
     bottom: true,
     transition: "slide-y-reverse-transition",
+    Name: "",
+    LocationId: "",
     Locations: [],
+    LocationsByid: [],
   }),
   methods: {
     /* eslint-disable no-console */
-     getLocation() {
+    getLocation() {
       console.log("getLocation");
       api
         .get("/Location")
@@ -140,6 +142,49 @@ export default {
         .catch(e => {
           console.log(e);
         });
+    },
+    getLocationByid() {
+      console.log("getLocationByid");
+      console.log(this.LocationId);
+      api
+        .get("/Location/"+this.LocationId)
+        .then(response => {
+          this.LocationsByid = response.data;
+          console.log(response.data);
+          this.postBin();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    postBin() {
+      console.log("postBin");
+
+      var data = {
+        Name: this.Name,
+        State: 0,
+        Status: 0,
+        Location:{
+            _id: this.LocationsByid._id,
+            Name: this.LocationsByid.Name,
+            lat: this.LocationsByid.lat,
+            lon: this.LocationsByid.lon,
+        }
+      };
+      console.log(data);
+      api
+        .post("/SmartBin", data, {
+          headers: {
+            "content-type": "application/json"
+          }
+        })
+        .then(response => {
+          console.log(response);
+           this.cancel();
+        });
+    },
+    cancel() {
+      window.location.reload();
     },
   },
   mounted() {

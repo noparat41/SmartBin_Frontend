@@ -11,7 +11,7 @@
               <v-card class="overflow-hidden" color="#ffff">
                 <v-toolbar color="#F4511E" dark>
                   <v-icon>mdi-account</v-icon>
-                  <v-toolbar-title class="font-weight-light">User Profile</v-toolbar-title>
+                  <v-toolbar-title class="font-weight"><span>UserProfile</span></v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-btn color="#F4511E" fab small @click="isEditing = !isEditing">
                     <v-icon v-if="isEditing">mdi-close</v-icon>
@@ -45,9 +45,14 @@
                 </v-toolbar>
                 <v-card-text>
                   <br />
-                  <v-col align="center">
+                  <v-col align="center" v-if="Image==null">
                     <v-avatar size="150">
                       <v-icon size="200">account_circle</v-icon>
+                    </v-avatar>
+                  </v-col>
+                  <v-col align="center" v-else>
+                    <v-avatar size="150">
+                      <v-img :src=Image></v-img>
                     </v-avatar>
                   </v-col>
                   <v-col>
@@ -70,7 +75,7 @@
                     <v-text-field :disabled="!isEditing" v-model="Email" label="Email"></v-text-field>
                     <v-text-field
                       :disabled="!isEditing"
-                      color="white"
+                    
                       v-model="Phone"
                       label="Telephone number"
                     ></v-text-field>
@@ -90,7 +95,7 @@
                     <v-btn
                       :disabled="!isEditing"
                       color="#4267B2"
-                      @click="$router.push('/Navbar')"
+                      @click="cancel()"
                       text
                       large
                     >cancel</v-btn>
@@ -147,13 +152,14 @@ export default {
     /* eslint-disable no-console */
     getStaff() {
       console.log("getStaff");
+       
       api
         .get("/Staff/" + firebase.auth().currentUser.uid)
         .then(response => {
           this.Staffs = response.data;
           console.log(this.Staffs);
 
-          this.Id = this.Staffs._id;
+          this.Id = this.Staffs.Uid;
           this.Ids = this.Staffs.Ids;
           this.UserName = this.Staffs.NickName;
           this.FirstName = this.Staffs.FirstName;
@@ -165,14 +171,21 @@ export default {
         .catch(e => {
           console.log(e);
           this.postStaffByUid();
+          this.cancel();
         });
     },
     postStaffByUid: async () => {
       console.log("PostStaffByUid");
+     
       var data = {
         Uid: firebase.auth().currentUser.uid,
         Email: firebase.auth().currentUser.email,
-        Image: firebase.auth().currentUser.photoUrl
+        Image: firebase.auth().currentUser.photoURL,
+        Ids: null,
+        NickName: null,
+        FirstName: null,
+        SurName: null,
+        Phone: null,
       };
       api
         .post("/Staff", data, {
@@ -190,14 +203,14 @@ export default {
         .put(
           "/Staff/" + this.Id,
           {
-            uid: firebase.auth().currentUser.uid,
-            id: this.Id,
-            ids: this.Ids,
-            nickName: this.UserName,
-            firstName: this.FirstName,
-            surName: this.SurName,
-            phone: this.Phone,
-            email: this.Email
+            Uid: firebase.auth().currentUser.uid,
+            Id: this.Id,
+            Ids: this.Ids,
+            NickName: this.UserName,
+            FirstName: this.FirstName,
+            SurName: this.SurName,
+            Phone: this.Phone,
+            Email: this.Email
           },
           {
             headers: {
@@ -207,6 +220,7 @@ export default {
         )
         .then(response => {
           console.log(response);
+          this.cancel();
         });
     },
     logout: function() {
@@ -216,8 +230,12 @@ export default {
         .then(() => {
           this.$router.push("/");
         });
-    }
+    },
+     cancel() {
+      window.location.reload();
+    },
   },
+
 
   mounted() {
     this.getStaff();

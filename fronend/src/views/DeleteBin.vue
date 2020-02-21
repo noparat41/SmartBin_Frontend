@@ -26,7 +26,7 @@
       
           <v-speed-dial
             v-model="fab"
-            top="true"
+            :top="top"
             :right="right"
             :direction="direction"
             :transition="transition"
@@ -75,10 +75,12 @@ export default {
   },
   data: () => ({
     dialogs: false,
-    direction: "left",
+    direction: "bottom",
     fab: false,
     fling: false,
     tabs: null,
+    top: true,
+    left: true,
     right: true,
     bottom: true,
     transition: "slide-y-reverse-transition",
