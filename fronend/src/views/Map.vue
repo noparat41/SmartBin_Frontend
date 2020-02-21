@@ -7,11 +7,11 @@
       
           <longdo-map :zoom="10">
             <longdo-map-marker
-              v-for="(item, i) in markers"
+              v-for="(item, i) in Bins"
               :key="i"
-              :location="item.location"
-              :title="item.title"
-              :detail="item.detail"
+              :location="item.Location"
+              :title="item.Name"
+              :detail="item.Location.Name"
             />
           </longdo-map>
        
@@ -33,18 +33,30 @@ export default {
   },
   data() {
     return {
-      desserts: [
+      Bins: [
         {
-          name: "Bin 1",
-          value: 0
+          Name: "Bin 1",
+          Location:{
+            Name: "อาคารเรียนรวม 1",
+            lon: "102.017166",
+            lat: "14.88134"
+          }
         },
         {
-          name: "Bin 2",
-          value: 50
+          Name: "Bin 2",
+          Location:{
+            Name: "อาคารวิชาการ 1",
+            lon: "102.018785",
+            lat: "14.879283"
+          }
         },
         {
-          name: "Bin 3",
-          value: 100
+          Name: "Bin 3",
+          Location:{
+            Name: "อาคารวิชาการ 2",
+            lon: "102.019915",
+            lat: "14.879978"
+          }
         }
       ]
     };

@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from "../components/Login.vue";
 
-
 import Status from "../views/Status.vue";
 import AddBin from "../views/AddBin.vue";
 import EditBin from "../views/EditBin.vue";
@@ -17,6 +16,8 @@ Vue.use(Router);
 
 let router = new Router({
   routes: [
+    
+
     {
       path: '/',
       name: 'Login',

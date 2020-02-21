@@ -3,7 +3,7 @@
     <Navbar />
     <v-container class="pa-4 text-center">
       <v-row class="fill-height" align="center" justify="center">
-        <template v-for="(item, i) in desserts">
+        <template v-for="(item, i) in Bins">
           <v-col :key="i" cols="12" md="4">
             <v-hover v-slot:default="{ hover }">
               <v-card :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }" >
@@ -62,26 +62,26 @@ export default {
   },
   data() {
     return {
-      desserts: [
+      Bins: [
         {
           Name: "Bin 1",
-          Status: 0,
+          Status: 1,
           Location: {
-            Name: "B1"
+            Name: "อาคารเรียนรวม 1"
           }
         },
         {
           Name: "Bin 2",
           Status: 10,
           Location: {
-            Name: "B2"
+            Name: "อาคารวิชาการ 1"
           }
         },
         {
           Name: "Bin 3",
           Status: 20,
           Location: {
-            Name: "B3"
+            Name: "อาคารวิชาการ 2"
           }
         }
       ]

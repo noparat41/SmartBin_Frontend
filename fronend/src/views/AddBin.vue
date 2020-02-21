@@ -5,7 +5,7 @@
     <v-container>
       <br />
       <br />
-      <v-card id="create" align="center" justify="center" dark>
+      <v-card id="create" align="center" justify="center" dark > 
         <v-container fluid>
           <br />
           <v-col class="d-flex" cols="12" sm="5">
