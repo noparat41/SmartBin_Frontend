@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-app-bar app clipped-left color="#F4511E" dark>
-      <v-col>
+    <v-app-bar app clipped-left color="#F4511E" dark >
+      <v-col sm="3">
         <v-col>
           <v-col>
             <h1>
@@ -12,15 +12,9 @@
         </v-col>
       </v-col>
       <v-spacer />
- 
-      <v-text-field
-        solo-inverted
-        flat
-        hide-details
-        label="Search"
-        
-      />
-      <v-btn dark icon  @click="$router.push('/Status')">
+
+      <v-text-field solo-inverted flat hide-details label="Search" />
+      <v-btn dark icon @click="$router.push('/Status')">
         <v-icon size="30">search</v-icon>
       </v-btn>
 
@@ -39,17 +33,22 @@
           <v-icon></v-icon>
         </tr>
       </td>
-      <v-avatar size="30" />
-      <v-avatar size="20">
-        <v-icon size="30">account_circle</v-icon>
+      <v-avatar size="20" />
+
+      <v-avatar size="30" v-if="Staffs.Image==null || Staffs.Image=='' ">
+        <v-icon size="35">account_circle</v-icon>
       </v-avatar>
 
-      <v-btn dark text small  @click="$router.push('/Profile')">
-        <span>{{currentUser}}</span>
+      <v-avatar size="30" v-else>
+        <v-img :src="Staffs.Image"></v-img>
+      </v-avatar>
+
+      <v-btn dark text small @click="$router.push('/Profile')">
+        <span>{{Staffs.NickName}}</span>
       </v-btn>
       <v-menu bottom left>
         <template v-slot:activator="{ on }">
-          <v-btn dark icon v-on="on" >
+          <v-btn dark icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -89,15 +88,25 @@
           <v-col align="center">
             <span class="white--text">Recycle waste</span>
           </v-col>
-          <v-progress-linear color="green " height="25" width="50" reactive :value="PercentGoodBin">
-            <strong>{{ PercentGoodBin }}%</strong>
-          </v-progress-linear>
+          <v-card>
+            <v-progress-linear
+              color="green "
+              height="25"
+              width="50"
+              reactive
+              :value="PercentGoodBin"
+            >
+              <strong>{{ PercentGoodBin }}%</strong>
+            </v-progress-linear>
+          </v-card>
           <v-col align="center">
             <span class="white--text">Can't recycle waste</span>
           </v-col>
-          <v-progress-linear color="warning" height="25" reactive :value="PercentBadBin ">
-            <strong>{{ PercentBadBin }}%</strong>
-          </v-progress-linear>
+          <v-card>
+            <v-progress-linear color="warning" height="25" reactive :value="PercentBadBin ">
+              <strong>{{ PercentBadBin }}%</strong>
+            </v-progress-linear>
+          </v-card>
         </v-col>
       </v-col>
 
@@ -119,17 +128,23 @@
       <br />
       <v-divider></v-divider>
       <br />
-
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
+import api from "../API";
 import firebase from "firebase";
 export default {
   name: "Navbar",
   data() {
     return {
+      items: [
+        { icon: "dashboard", title: "Trash Status", route: "/Status" },
+        { icon: "delete", title: "Manage Trash", route: "/AddBin" },
+        { icon: "my_location", title: "Map", route: "/Map" },
+        { icon: "bar_chart", title: "Statistics", route: "/Statistics" }
+      ],
       i: 0,
       status: 0,
       sum: 0,
@@ -142,73 +157,55 @@ export default {
       dialog: false,
       drawerRight: false,
       isLoggedIn: false,
-      currentUser: false,
-
-      items: [
-        { icon: "dashboard", title: "Trash Status", route: "/Status" },
-        { icon: "delete", title: "Manage Trash", route: "/AddBin" },
-        { icon: "my_location", title: "Map", route: "/Map" },
-        { icon: "bar_chart", title: "Statistics", route: "/Statistics" }
-      ],
-      Users: [
-        {
-          Name: "Arm",
-          Point: 0,
-          Bin: {
-            BadBin: 0,
-            GoodBin: 0
-          }
-        },
-        {
-          Name: "Nopparat",
-          Point: 10,
-          Bin: {
-            BadBin: 1,
-            GoodBin: 1
-          }
-        },
-        {
-          Name: "Waoram",
-          Point: 20,
-          Bin: {
-            BadBin: 0,
-            GoodBin: 1
-          }
-        }
-      ],
-      Bins: [
-        {
-          Name: "Bin 1",
-          Status: 1,
-          Location: {
-            Name: "อาคารเรียนรวม 1"
-          }
-        },
-        {
-          Name: "Bin 2",
-          Status: 10,
-          Location: {
-            Name: "อาคารวิชาการ 1"
-          }
-        },
-        {
-          Name: "Bin 3",
-          Status: 20,
-          Location: {
-            Name: "อาคารวิชาการ 2"
-          }
-        }
-      ]
+      currentUser: "",
+      Image: "",
+      Staffs: [],
+      Users: [],
+      Bins: []
     };
   },
-  created() {
-    if (firebase.auth().currentUser) {
-      this.isLoggedIn = true;
-      this.currentUser = firebase.auth().currentUser.email;
-    }
-  },
+
   methods: {
     /* eslint-disable no-console */
+     getBin() {
+      console.log("getBin");
+      api
+        .get("/SmartBin")
+        .then(response => {
+          this.Bins = response.data;
+          console.log(this.Bins);
+          this.CalculateStatus();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    getUser() {
+      console.log("getUser");
+      api
+        .get("/User")
+        .then(response => {
+          this.Users = response.data;
+          console.log(this.Users);
+          this.Calculate();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    getStaff() {
+      console.log("getStaff");
+      api
+        .get("/Staff/" + firebase.auth().currentUser.uid)
+        .then(response => {
+          this.Staffs = response.data;
+          console.log(this.Staffs);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
     logout: function() {
       firebase
         .auth()
@@ -217,12 +214,13 @@ export default {
           this.$router.push("/");
         });
     },
-    CalculateStatus(){
+
+    CalculateStatus() {
       console.log("Status");
-      this.i=0;
+      this.i = 0;
       while (this.i < this.Bins.length) {
-        if(this.Bins[this.i].Status === 20){
-            this.status++;
+        if (this.Bins[this.i].Status === 20) {
+          this.status++;
         }
         this.i++;
       }
@@ -231,6 +229,7 @@ export default {
 
     Calculate() {
       console.log("calculate");
+      this.i = 0;
       while (this.i < this.Users.length) {
         this.GoodBin = this.GoodBin + this.Users[this.i].Bin.GoodBin;
         this.BadBin = this.BadBin + this.Users[this.i].Bin.BadBin;
@@ -282,8 +281,9 @@ export default {
     }
   },
   mounted() {
-    this.Calculate();
-    this.CalculateStatus();
+    this.getStaff();
+    this.getUser();
+    this.getBin();
   }
 };
 </script>
