@@ -87,7 +87,7 @@
               <v-icon>delete_forever</v-icon>
             </v-btn>
           </v-speed-dial>
-
+<br />
           <v-divider></v-divider>
           <br />
           <v-card-actions>

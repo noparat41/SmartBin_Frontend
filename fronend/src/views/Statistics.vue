@@ -6,45 +6,47 @@
         <template v-for="(item, i) in Users">
           <v-col :key="i" cols="12" md="4">
             <v-hover v-slot:default="{ hover }">
-              <v-card :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }" >
-                
+              <v-card :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <v-col>
-                <v-card color="grey lighten-3">
-                  <br/>
-                <h3>{{item.Name}}</h3>
-              
-                <v-avatar size="80">
-                  <v-icon size="80">account_circle</v-icon>
-                </v-avatar>
-
-                <h5>Point : {{item.Point}}</h5>
-                <v-col>
-                  <v-col>
-                    <v-card>
-                    <v-progress-linear
-                      color="warning "
-                      height="25"
-                      width="50"
-                      reactive
-                      :value="CalculateGoodBin(item.Bin.GoodBin, item.Bin.BadBin)"
-                    >
-                      <strong>{{ CalculateGoodBin(item.Bin.GoodBin, item.Bin.BadBin) }}%</strong>
-                    </v-progress-linear>
-                    </v-card>
+                  <v-card color="grey lighten-3">
                     <br />
-                    <v-card>
-                    <v-progress-linear
-                      color="yellow darken-1"
-                      height="25"
-                      reactive
-                      :value="CalculateBadBin(item.Bin.GoodBin, item.Bin.BadBin) "
-                    >
-                      <strong>{{ CalculateBadBin(item.Bin.GoodBin, item.Bin.BadBin) }}%</strong>
-                    </v-progress-linear>
-                     </v-card>
-                  </v-col>
-                </v-col>
-              </v-card>
+                    <h3>{{item.Name}}</h3>
+
+                    <v-avatar size="80" v-if="item.Photo==null || item.Photo ==''">
+                      <v-icon size="80">account_circle</v-icon>
+                    </v-avatar>
+                     <v-avatar size="80" v-else>
+                       <v-img  :src="item.Photo"></v-img>
+                    </v-avatar>
+
+                    <h5>Point : {{item.Point}}</h5>
+                    <v-col>
+                      <v-col>
+                        <v-card>
+                          <v-progress-linear
+                            color="warning "
+                            height="25"
+                            width="50"
+                            reactive
+                            :value="CalculateGoodBin(item.Bin.GoodBin, item.Bin.BadBin)"
+                          >
+                            <strong>{{ CalculateGoodBin(item.Bin.GoodBin, item.Bin.BadBin) }}%</strong>
+                          </v-progress-linear>
+                        </v-card>
+                        <br />
+                        <v-card>
+                          <v-progress-linear
+                            color="yellow darken-1"
+                            height="25"
+                            reactive
+                            :value="CalculateBadBin(item.Bin.GoodBin, item.Bin.BadBin) "
+                          >
+                            <strong>{{ CalculateBadBin(item.Bin.GoodBin, item.Bin.BadBin) }}%</strong>
+                          </v-progress-linear>
+                        </v-card>
+                      </v-col>
+                    </v-col>
+                  </v-card>
                 </v-col>
               </v-card>
             </v-hover>
@@ -56,6 +58,7 @@
 </template>
 
 <script>
+import api from "../API";
 import Navbar from "../components/Navbar";
 export default {
   components: {
@@ -63,37 +66,25 @@ export default {
   },
   data() {
     return {
-      Users: [
-        {
-          Name: "Arm",
-          Point: 0,
-          Bin: {
-            BadBin: 0,
-            GoodBin: 0
-          }
-        },
-        {
-          Name: "Nopparat",
-          Point: 10,
-          Bin: {
-            BadBin: 1,
-            GoodBin: 1
-          }
-        },
-        {
-          Name: "Waoram",
-          Point: 20,
-          Bin: {
-            BadBin: 0,
-            GoodBin: 1
-          }
-        }
-      ]
+      Users: [],
+      Image: "",
     };
   },
   methods: {
     /* eslint-disable no-console */
-
+    getUser() {
+      console.log("getUser");
+      api
+        .get("/User")
+        .then(response => {
+          this.Users = response.data;
+          console.log(this.Users);
+         
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
     CalculateGoodBin(GoodBin, BadBin) {
       console.log("calculateGoodBin");
       if (GoodBin + BadBin === 0) {
@@ -127,7 +118,7 @@ export default {
     }
   },
   mounted() {
-    //this.getLocation();
+    this.getUser();
   }
 };
 </script>

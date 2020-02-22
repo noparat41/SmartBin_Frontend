@@ -9,21 +9,21 @@
         <v-container fluid>
           <br />
           <br />
-        
+
           <br />
           <v-col class="d-flex" cols="12" sm="4">
             <v-select
-              :items="Region"
+              :items="Bins"
               label="Name"
-              v-model="HospitalName"
-              item-text="regionName"
-              item-value="id"
+              v-model="BinId"
+              item-text="Name"
+              item-value="Name"
               :rules="[(v) => !!v || 'Item is required']"
               solo
             ></v-select>
           </v-col>
           <br />
-      
+
           <v-speed-dial
             v-model="fab"
             :top="top"
@@ -47,16 +47,17 @@
               <v-icon>delete_forever</v-icon>
             </v-btn>
           </v-speed-dial>
-
+          <br />
+          <br />
           <v-divider></v-divider>
           <br />
           <v-card-actions>
             <v-row justify="center">
               <div class="text-center">
-                <v-btn rounded color="red" dark large>Delete</v-btn>
+                <v-btn rounded color="red" dark large @click="Delete()">Delete</v-btn>
               </div>
               <div class="text-center">
-                <v-btn text color="red" dark large>cancel</v-btn>
+                <v-btn text color="red" dark large @click="cancel()">cancel</v-btn>
               </div>
             </v-row>
           </v-card-actions>
@@ -84,25 +85,42 @@ export default {
     right: true,
     bottom: true,
     transition: "slide-y-reverse-transition",
-    Locations: []
+    Bins: [],
+    BinId: ""
   }),
   methods: {
     /* eslint-disable no-console */
-    getLocation() {
-      console.log("getLocation");
+    getBin() {
+      console.log("getBin");
       api
-        .get("/Location")
+        .get("/SmartBin")
         .then(response => {
-          this.Locations = response.data;
-          console.log(response.data);
+          this.Bins = response.data;
+          console.log(this.Bins);
         })
         .catch(e => {
           console.log(e);
         });
+    },
+    Delete() {
+      console.log("Delete");
+      api
+        .delete("/SmartBin/" + this.BinId)
+        .then(response => {
+          console.log(response);
+          this.cancel();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+
+    cancel() {
+      window.location.reload();
     }
   },
   mounted() {
-    this.getLocation();
+    this.getBin();
   }
 };
 </script>
