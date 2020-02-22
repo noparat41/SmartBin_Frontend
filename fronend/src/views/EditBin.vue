@@ -14,7 +14,7 @@
               label="Name"
               v-model="BinId"
               item-text="Name"
-              item-value="Uid"
+              item-value="Name"
               :rules="[(v) => !!v || 'Item is required']"
               solo
             ></v-select>
@@ -55,7 +55,7 @@
               <v-icon>delete_forever</v-icon>
             </v-btn>
           </v-speed-dial>
-
+          <br />
           <v-divider></v-divider>
           <br />
           <v-card-actions>
@@ -64,7 +64,7 @@
                 <v-btn rounded color="warning" dark large @click="getLocationByid()">Edit</v-btn>
               </div>
               <div class="text-center">
-                <v-btn text color="warning" dark large @click="cancel() ">cancel</v-btn>
+                <v-btn text color="warning" dark large @click="cancel()">cancel</v-btn>
               </div>
             </v-row>
           </v-card-actions>
@@ -138,25 +138,12 @@ export default {
           console.log(e);
         });
     },
-    getBinByid() {
-      console.log("getBinByid");
+
+    putBin() {
       console.log(this.BinId);
       api
-        .get("/Location/" + this.BinId)
-        .then(response => {
-          this.BinByid = response.data;
-          console.log(response.data);
-          //this.putBin();
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    putBin() {
-      console.log(this.Ids);
-      api
         .put(
-          "/Bin/" + this.BinId,
+          "/SmartBin/" + this.BinId,
           {
             Name: this.BinByid.Name,
             State: this.BinByid.State,
