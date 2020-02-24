@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from "../components/Login.vue";
 
-import Status from "../views/Status.vue";
+import ManageTrash from "../views/ManageTrash.vue";
 import AddBin from "../views/AddBin.vue";
 import EditBin from "../views/EditBin.vue";
 import DeleteBin from "../views/DeleteBin.vue";
@@ -28,9 +28,9 @@ let router = new Router({
     },
     
     {
-      path: '/Status',
-      name: 'Status',
-      component: Status,
+      path: '/ManageTrash',
+      name: 'ManageTrash',
+      component: ManageTrash,
       meta: {
         requiresAuth: true
       }

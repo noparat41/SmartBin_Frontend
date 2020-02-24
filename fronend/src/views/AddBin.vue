@@ -61,7 +61,6 @@
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-
             </v-col>
           </v-row>
           <v-speed-dial
@@ -87,7 +86,7 @@
               <v-icon>delete_forever</v-icon>
             </v-btn>
           </v-speed-dial>
-<br />
+          <br />
           <v-divider></v-divider>
           <br />
           <v-card-actions>
@@ -127,7 +126,7 @@ export default {
     Name: "",
     LocationId: "",
     Locations: [],
-    LocationsByid: [],
+    LocationsByid: []
   }),
   methods: {
     /* eslint-disable no-console */
@@ -147,7 +146,7 @@ export default {
       console.log("getLocationByid");
       console.log(this.LocationId);
       api
-        .get("/Location/"+this.LocationId)
+        .get("/Location/" + this.LocationId)
         .then(response => {
           this.LocationsByid = response.data;
           console.log(response.data);
@@ -164,11 +163,11 @@ export default {
         Name: this.Name,
         State: 0,
         Status: 0,
-        Location:{
-            _id: this.LocationsByid._id,
-            Name: this.LocationsByid.Name,
-            lat: this.LocationsByid.lat,
-            lon: this.LocationsByid.lon,
+        Location: {
+          _id: this.LocationsByid._id,
+          Name: this.LocationsByid.Name,
+          lat: this.LocationsByid.lat,
+          lon: this.LocationsByid.lon
         }
       };
       console.log(data);
@@ -180,12 +179,12 @@ export default {
         })
         .then(response => {
           console.log(response);
-           this.cancel();
+          this.cancel();
         });
     },
     cancel() {
       window.location.reload();
-    },
+    }
   },
   mounted() {
     this.getLocation();
