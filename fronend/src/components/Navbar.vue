@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar app clipped-left color="#F4511E" dark >
+    <v-app-bar app clipped-left color="#F4511E" dark>
       <v-col sm="5">
         <v-col>
           <v-col>
@@ -16,7 +16,7 @@
       <v-btn dark icon small @click="$router.push('/ManageTrash')">
         <v-icon size="30">notifications</v-icon>
       </v-btn>
-      
+
       <td v-if="status != 0">
         <tr>
           <td />
@@ -29,7 +29,6 @@
         </tr>
       </td>
       <v-divider class="mx-4" inset vertical></v-divider>
-      
 
       <v-avatar size="30" v-if="Staffs.Image==null || Staffs.Image=='' ">
         <v-icon size="35">account_circle</v-icon>
@@ -42,7 +41,8 @@
       <v-btn dark text small @click="$router.push('/Profile')">
         <span>{{Staffs.NickName}}</span>
       </v-btn>
-      <v-menu bottom left>
+
+      <v-menu bottom left transition="slide-y-transition">
         <template v-slot:activator="{ on }">
           <v-btn dark icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -51,8 +51,8 @@
 
         <v-card height="mx-auto" width="200" dark>
           <v-list>
-            <v-list-item @click="$router.push('/Profile')">
-              <v-col id="H1" class="8">
+            <v-list-item id="H1" @click="$router.push('/Profile')">
+              <v-col class="8">
                 <v-icon>person</v-icon>
               </v-col>
               <v-list-item-title>Profile</v-list-item-title>
@@ -62,6 +62,31 @@
                 <v-icon>exit_to_app</v-icon>
               </v-col>
               <v-list-item-title>Sign Out</v-list-item-title>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-list-item id="H3" @click="$router.push('/ManageTrash')">
+              <v-col class="8">
+                <v-icon>delete</v-icon>
+              </v-col>
+              <v-list-item-title>Manage Trash</v-list-item-title>
+            </v-list-item>
+            <v-list-item id="H4" @click="$router.push('/ManageLocation')">
+              <v-col class="8">
+                <v-icon>terrain</v-icon>
+              </v-col>
+              <v-list-item-title>Manage Location</v-list-item-title>
+            </v-list-item>
+            <v-list-item id="H3" @click="$router.push('/Map')">
+              <v-col class="8">
+                <v-icon>my_location</v-icon>
+              </v-col>
+              <v-list-item-title>Map</v-list-item-title>
+            </v-list-item>
+            <v-list-item id="H4" @click="$router.push('/Statistics')">
+              <v-col class="8">
+                <v-icon>bar_chart</v-icon>
+              </v-col>
+              <v-list-item-title>Statistics</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-card>
@@ -163,13 +188,12 @@ export default {
 
   methods: {
     /* eslint-disable no-console */
-     getBin() {
-      console.log("getBin");
+    getBin() {
       api
         .get("/SmartBin")
         .then(response => {
           this.Bins = response.data;
-          console.log(this.Bins);
+
           this.CalculateStatus();
         })
         .catch(e => {
@@ -177,12 +201,11 @@ export default {
         });
     },
     getUser() {
-      console.log("getUser");
       api
         .get("/User")
         .then(response => {
           this.Users = response.data;
-          console.log(this.Users);
+
           this.Calculate();
         })
         .catch(e => {
@@ -190,12 +213,10 @@ export default {
         });
     },
     getStaff() {
-      console.log("getStaff");
       api
         .get("/Staff/" + firebase.auth().currentUser.uid)
         .then(response => {
           this.Staffs = response.data;
-          console.log(this.Staffs);
         })
         .catch(e => {
           console.log(e);
@@ -212,7 +233,6 @@ export default {
     },
 
     CalculateStatus() {
-      console.log("Status");
       this.i = 0;
       while (this.i < this.Bins.length) {
         if (this.Bins[this.i].Status === 20) {
@@ -220,11 +240,9 @@ export default {
         }
         this.i++;
       }
-      console.log(this.status);
     },
 
     Calculate() {
-      console.log("calculate");
       this.i = 0;
       while (this.i < this.Users.length) {
         this.GoodBin = this.GoodBin + this.Users[this.i].Bin.GoodBin;
@@ -237,7 +255,6 @@ export default {
     },
 
     CalculateGoodBin(GoodBin, BadBin) {
-      console.log("calculateGoodBin");
       if (GoodBin + BadBin === 0) {
         this.PercentGoodBin = 0;
       } else {
@@ -253,11 +270,9 @@ export default {
           this.PercentGoodBin = parseInt((GoodBin / (GoodBin + BadBin)) * 100);
         }
       }
-      console.log(this.PercentGoodBin);
     },
 
     CalculateBadBin(GoodBin, BadBin) {
-      console.log("CalculateBadBin");
       if (GoodBin + BadBin === 0) {
         this.PercentBadBin = 0;
       } else {
@@ -273,7 +288,6 @@ export default {
           this.PercentBadBin = parseInt((BadBin / (GoodBin + BadBin)) * 100);
         }
       }
-      console.log(this.PercentBadBin);
     }
   },
   mounted() {

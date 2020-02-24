@@ -3,7 +3,7 @@
     <v-content>
       <div
         class="img-background"
-        v-bind:style="{'background-image': 'url(' + require('../assets/background.jpg') + ')'}"
+        v-bind:style="{'background-image': 'url(' + require('../assets/Background.jpg') + ')'}"
       >
         <v-container class="fill-height" fluid>
           <v-row align="center" justify="center">
@@ -20,7 +20,7 @@
                       <h2>
                         <span>Login</span>
                       </h2>
-                      
+
                       <v-col>
                         <v-col>
                           <v-row class="justify-center">
