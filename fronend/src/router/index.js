@@ -14,8 +14,6 @@ Vue.use(Router);
 
 let router = new Router({
   routes: [
-    
-
     {
       path: '/',
       name: 'Login',
@@ -24,7 +22,6 @@ let router = new Router({
         requiresGuest: true
       }
     },
-    
     {
       path: '/ManageTrash',
       name: 'ManageTrash',
@@ -57,7 +54,7 @@ let router = new Router({
         requiresAuth: true
       }
     },
-    
+
     {
       path: '/Profile',
       name: 'Profile',

@@ -3,115 +3,123 @@
     <v-content>
       <div
         class="img-background"
-        v-bind:style="{'background-image': 'url(' + require('../assets/background.jpg') + ')'}"
+        v-bind:style="{'background-image': 'url(' + require('../assets/Background.jpg') + ')'}"
       >
-        <v-container class="fill-height" fluid>
-          <v-row align="center" justify="center">
-            <v-col md="5">
-              <v-card class="overflow-hidden" color="#ffff">
-                <v-toolbar color="#F4511E" dark>
-                  <v-icon>mdi-account</v-icon>
-                  <v-toolbar-title class="font-weight"><span>UserProfile</span></v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-btn color="#F4511E" fab small @click="isEditing = !isEditing">
-                    <v-icon v-if="isEditing">mdi-close</v-icon>
-                    <v-icon v-else>mdi-pencil</v-icon>
-                  </v-btn>
+        <br />
+        <br />
+        <br />
+        <v-card class="mx-auto" max-width="600">
+          <v-toolbar color="#F4511E" dark>
+            <v-toolbar-title>Profile</v-toolbar-title>
 
-                  <v-menu bottom left>
-                    <template v-slot:activator="{ on }">
-                      <v-btn dark icon v-on="on">
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
+            <v-spacer></v-spacer>
+            <v-btn color="#F4511E" fab small @click="isEditing = !isEditing">
+              <v-icon v-if="isEditing">mdi-close</v-icon>
+              <v-icon v-else>mdi-pencil</v-icon>
+            </v-btn>
+            <v-menu bottom left transition="slide-y-transition">
+              <template v-slot:activator="{ on }">
+                <v-btn dark icon v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
 
-                    <v-card height="mx-auto" width="250" dark>
-                      <v-list>
-                        <v-list-item @click="$router.push('/ManageTrash')">
-                          <v-col id="H1" class="8">
-                            <v-icon>home</v-icon>
-                          </v-col>
-                          <v-list-item-title>Home</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item id="H2" @click="logout()">
-                          <v-col class="8">
-                            <v-icon>exit_to_app</v-icon>
-                          </v-col>
-                          <v-list-item-title>Sign Out</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-card>
-                  </v-menu>
-                </v-toolbar>
-                <v-card-text>
-                  <br />
-                  <v-col align="center" v-if="Image==null">
-                    <v-avatar size="150">
-                      <v-icon size="200">account_circle</v-icon>
-                    </v-avatar>
-                  </v-col>
-                  <v-col align="center" v-else>
-                    <v-avatar size="150">
-                      <v-img :src=Image></v-img>
-                    </v-avatar>
-                  </v-col>
-                  <v-col>
-                    <v-text-field :disabled="!isEditing" v-model="Ids" label="UserId"></v-text-field>
-                  </v-col>
-                  <v-col>
-                    <v-text-field :disabled="!isEditing" v-model="UserName" label="Username"></v-text-field>
-                    <v-col>
-                      <v-row>
-                        <v-text-field
-                          :disabled="!isEditing"
-                          v-model="FirstName"
-                          label="First Name"
-                          id="firstname"
-                        ></v-text-field>
-                        <v-spacer />
-                        <v-text-field :disabled="!isEditing" v-model="SurName" label="Last Names"></v-text-field>
-                      </v-row>
+              <v-card height="mx-auto" width="200" dark>
+                <v-list>
+                  <v-list-item id="H1" @click="$router.push('/ManageTrash')">
+                    <v-col class="8">
+                      <v-icon>home</v-icon>
                     </v-col>
-                    <v-text-field :disabled="!isEditing" v-model="Email" label="Email"></v-text-field>
-                    <v-text-field
-                      :disabled="!isEditing"
-                    
-                      v-model="Phone"
-                      label="Telephone number"
-                    ></v-text-field>
-                  </v-col>
-                </v-card-text>
-
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-col>
-                    <v-btn
-                      :disabled="!isEditing"
-                      rounded
-                      large
-                      color="success"
-                      @click="putStaff()"
-                    >Save</v-btn>
-                    <v-btn
-                      :disabled="!isEditing"
-                      color="#4267B2"
-                      @click="cancel()"
-                      text
-                      large
-                    >cancel</v-btn>
-                  </v-col>
-                </v-card-actions>
-                <v-snackbar
-                  v-model="hasSaved"
-                  :timeout="2000"
-                  absolute
-                  bottom
-                  left
-                >Your profile has been updated</v-snackbar>
+                    <v-list-item-title>Home</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item id="H2" @click="logout()">
+                    <v-col class="8">
+                      <v-icon>exit_to_app</v-icon>
+                    </v-col>
+                    <v-list-item-title>Sign Out</v-list-item-title>
+                  </v-list-item>
+                  <v-divider></v-divider>
+                  <v-list-item id="H3" @click="$router.push('/ManageTrash')">
+                    <v-col class="8">
+                      <v-icon>delete</v-icon>
+                    </v-col>
+                    <v-list-item-title>Manage Trash</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item id="H4" @click="$router.push('/ManageLocation')">
+                    <v-col class="8">
+                      <v-icon>terrain</v-icon>
+                    </v-col>
+                    <v-list-item-title>Manage Location</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item id="H3" @click="$router.push('/Map')">
+                    <v-col class="8">
+                      <v-icon>my_location</v-icon>
+                    </v-col>
+                    <v-list-item-title>Map</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item id="H4" @click="$router.push('/Statistics')">
+                    <v-col class="8">
+                      <v-icon>bar_chart</v-icon>
+                    </v-col>
+                    <v-list-item-title>Statistics</v-list-item-title>
+                  </v-list-item>
+                </v-list>
               </v-card>
+            </v-menu>
+          </v-toolbar>
+
+          <v-container fluid>
+            <v-row dense>
+              <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+                <v-card v-show="card.Status == true">
+                  <v-card-text>
+                    <br />
+                    <v-col align="center" v-if="Image==null">
+                      <v-avatar size="150">
+                        <v-icon size="200">account_circle</v-icon>
+                      </v-avatar>
+                    </v-col>
+                    <v-col align="center" v-else>
+                      <v-avatar size="160">
+                        <v-img :src="Image"></v-img>
+                      </v-avatar>
+                    </v-col>
+                    <v-col>
+                      <v-text-field :disabled="!isEditing" v-model="UserName" label="Username"></v-text-field>
+                    </v-col>
+                  </v-card-text>
+                  <br />
+                  <br />
+                  <br />
+                </v-card>
+                <v-card v-show="card.Status == false">
+                  <v-col>
+                    <v-card-text>
+                      <v-text-field :disabled="!isEditing" v-model="Ids" label="UserId"></v-text-field>
+                      <v-text-field
+                        :disabled="!isEditing"
+                        v-model="FirstName"
+                        label="First Name"
+                        id="firstname"
+                      ></v-text-field>
+                      <v-spacer />
+                      <v-text-field :disabled="!isEditing" v-model="SurName" label="Last Names"></v-text-field>
+                      <v-text-field :disabled="!isEditing" v-model="Email" label="Email"></v-text-field>
+                      <v-text-field :disabled="!isEditing" v-model="Phone" label="Telephone number"></v-text-field>
+                    </v-card-text>
+                  </v-col>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-col align="center">
+              <v-btn :disabled="!isEditing" rounded large color="success" @click="putStaff()">Save</v-btn>
+              <v-btn :disabled="!isEditing" color="#4267B2" @click="cancel()" text large>cancel</v-btn>
             </v-col>
-          </v-row>
-        </v-container>
+          </v-card-actions>
+        </v-card>
       </div>
     </v-content>
   </v-app>
@@ -123,14 +131,18 @@ import api from "../API";
 export default {
   data() {
     return {
-      hasSaved: false,
+      cards: [
+        {
+          Status: true,
+          flex: 6
+        },
+        {
+          Status: false,
+          flex: 6
+        }
+      ],
       isEditing: null,
-      model: null,
       Staffs: [],
-      name: "",
-      uid: "",
-      uids: "",
-      Id: "",
       Ids: "",
       UserName: "",
       FirstName: "",
@@ -141,25 +153,14 @@ export default {
     };
   },
 
-  created() {
-    if (firebase.auth().currentUser) {
-      this.isLoggedIn = true;
-      this.uid = firebase.auth().currentUser.uid;
-    }
-  },
-
   methods: {
     /* eslint-disable no-console */
     getStaff() {
-      console.log("getStaff");
-       
       api
         .get("/Staff/" + firebase.auth().currentUser.uid)
         .then(response => {
           this.Staffs = response.data;
-          console.log(this.Staffs);
 
-          this.Id = this.Staffs.Uid;
           this.Ids = this.Staffs.Ids;
           this.UserName = this.Staffs.NickName;
           this.FirstName = this.Staffs.FirstName;
@@ -175,8 +176,6 @@ export default {
         });
     },
     postStaffByUid: async () => {
-      console.log("PostStaffByUid");
-     
       var data = {
         Uid: firebase.auth().currentUser.uid,
         Email: firebase.auth().currentUser.email,
@@ -185,7 +184,7 @@ export default {
         NickName: null,
         FirstName: null,
         SurName: null,
-        Phone: null,
+        Phone: null
       };
       api
         .post("/Staff", data, {
@@ -198,12 +197,12 @@ export default {
         });
     },
     putStaff() {
-      console.log(this.Ids);
       api
         .put(
-          "/Staff/" + this.Id,
+          "/Staff/" + firebase.auth().currentUser.uid,
           {
             Uid: firebase.auth().currentUser.uid,
+            Image: null,
             Id: this.Id,
             Ids: this.Ids,
             NickName: this.UserName,
@@ -231,11 +230,10 @@ export default {
           this.$router.push("/");
         });
     },
-     cancel() {
+    cancel() {
       window.location.reload();
-    },
+    }
   },
-
 
   mounted() {
     this.getStaff();

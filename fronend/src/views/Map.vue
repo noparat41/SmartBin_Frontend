@@ -2,19 +2,17 @@
   <div>
     <Navbar />
     <v-container>
-      <br/>
+      <br />
       <v-card class="mx-auto" width="mx-auto" height="600">
-      
-          <longdo-map :zoom="10">
-            <longdo-map-marker
-              v-for="(item, i) in Bins"
-              :key="i"
-              :location="item.Location"
-              :title="item.Name"
-              :detail="item.Location.Name"
-            />
-          </longdo-map>
-       
+        <longdo-map :zoom="10">
+          <longdo-map-marker
+            v-for="(item, i) in Bins"
+            :key="i"
+            :location="item.Location"
+            :title="item.Name"
+            :detail="item.Location.Name"
+          />
+        </longdo-map>
       </v-card>
     </v-container>
   </div>
@@ -34,26 +32,23 @@ export default {
   },
   data() {
     return {
-      Bins: [],
+      Bins: []
     };
   },
-   methods: {
+  methods: {
     /* eslint-disable no-console */
     getBin() {
-      console.log("getBin");
       api
         .get("/SmartBin")
         .then(response => {
           this.Bins = response.data;
-          console.log(this.Bins);
-          this.SearchStatus();
         })
         .catch(e => {
           console.log(e);
         });
-    },
-   },
-   mounted() {
+    }
+  },
+  mounted() {
     this.getBin();
   }
 };

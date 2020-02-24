@@ -15,9 +15,15 @@
       <v-toolbar color="#aaaaaa" dark v-if="Bar==true">
         <v-spacer />
         <v-col cols="12" sm="8" md="6">
-          <v-text-field solo-inverted flat hide-details label="Search" />
+          <v-text-field
+            solo-inverted
+            flat
+            hide-details
+            label="Search by trash name"
+            v-model="SearchName"
+          />
         </v-col>
-        <v-btn dark icon @click="$router.push('/Status')">
+        <v-btn dark icon @click="search()">
           <v-icon size="30">search</v-icon>
         </v-btn>
         <v-avatar size="20" />
@@ -30,7 +36,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-row class="fill-height" align="center" justify="center">
+      <v-row class="fill-height" align="center" justify="center" v-if="show ==true">
         <template v-for="(item, i) in Bins">
           <v-col :key="i" cols="12" md="4">
             <v-hover v-slot:default="{ hover }">
@@ -97,9 +103,78 @@
         </template>
       </v-row>
 
+      <v-row class="fill-height" align="center" justify="center" v-if="show ==false">
+        <v-col cols="12" md="4">
+          <v-hover v-slot:default="{ hover }">
+            <v-card :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+              <v-card-text>
+                <v-row>
+                  <v-spacer />
+                  <v-btn dark fab x-small icon color="warning" @click="Edit(Searchs)" size="15">
+                    <v-icon size="20">mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn dark fab x-small color="red" icon @click=" Delete(Searchs.Name)" size="15">
+                    <v-icon size="20">mdi-close</v-icon>
+                  </v-btn>
+                  <v-avatar size="20" />
+                </v-row>
+              </v-card-text>
+
+              <h3>{{Searchs.Name}}</h3>
+
+              <v-progress-circular
+                v-if="Searchs.Status*5 < 50"
+                :rotate="-90"
+                :size="100"
+                :width="20"
+                :value="Searchs.Status*5"
+                color="success"
+              >{{ Searchs.Status*5 }}%</v-progress-circular>
+
+              <v-progress-circular
+                v-else-if="Searchs.Status*5 < 100"
+                :rotate="-90"
+                :size="100"
+                :width="20"
+                :value="Searchs.Status*5"
+                color="warning"
+              >{{ Searchs.Status*5 }}%</v-progress-circular>
+
+              <v-progress-circular
+                v-else
+                :rotate="-90"
+                :size="100"
+                :width="20"
+                :value="Searchs.Status*5"
+                color="error"
+              >{{ Searchs.Status*5 }}%</v-progress-circular>
+
+              <h5>Location : {{Searchs.Location.Name}}</h5>
+              <br />
+
+              <v-btn @click="putBin(Searchs,false)" color="success" v-if="Searchs.Status*5 < 50">
+                <h6>clear</h6>
+              </v-btn>
+              <v-btn
+                @click="putBin(Searchs,false)"
+                color="warning"
+                v-else-if="Searchs.Status*5 < 100"
+              >
+                <h6>clear</h6>
+              </v-btn>
+              <v-btn @click="putBin(Searchs,false)" color="error" v-else>
+                <h6>clear</h6>
+              </v-btn>
+              <br />
+              <br />
+            </v-card>
+          </v-hover>
+        </v-col>
+      </v-row>
+
       <v-dialog v-model="AddDialog" max-width="600">
         <v-card align="center" justify="center" dark>
-          <br/>
+          <br />
           <h2>Add Trash</h2>
 
           <v-col class="d-flex" cols="12" sm="5">
@@ -184,6 +259,9 @@ export default {
   },
   data() {
     return {
+      show: true,
+      Searchs: [],
+      SearchName: null,
       Bar: false,
       LocationId: "",
       Name: "",
@@ -202,13 +280,12 @@ export default {
   },
   methods: {
     /* eslint-disable no-console */
+
     getBin() {
-      console.log("getBin");
       api
         .get("/SmartBin")
         .then(response => {
           this.Bins = response.data;
-          console.log(this.Bins);
           this.SearchStatus();
         })
         .catch(e => {
@@ -216,7 +293,6 @@ export default {
         });
     },
     SearchStatus() {
-      console.log("SearchStatus");
       this.i = 0;
       while (this.i < this.Bins.length) {
         if (this.Bins[this.i].Status === 20 && this.Bins[this.i].State != 0) {
@@ -226,11 +302,10 @@ export default {
       }
     },
     putBin(Abin, Switch) {
-      console.log("putBin");
       if (Abin.Status != 20) {
         return;
       }
-      console.log(Abin.Name);
+
       if (Switch) {
         this.State = 0;
         this.Status = Abin.Status;
@@ -267,25 +342,34 @@ export default {
         });
     },
     getLocation() {
-      console.log("getLocation");
       api
         .get("/Location")
         .then(response => {
           this.Locations = response.data;
-          console.log(response.data);
         })
         .catch(e => {
           console.log(e);
         });
     },
     getLocationByid(Status) {
-      console.log("getLocationByid");
-      console.log(this.LocationId);
+      if ((this.LocationId == null || this.LocationId == "") && Status) {
+        if (this.Name == null || this.Name == "") {
+          alert("Please fill out all information before adding trash.");
+        } else {
+          alert("Please select the location.");
+        }
+        return;
+      }
+      if ((this.LocationId == null || this.LocationId == "") && !Status) {
+        console.log(this.Bin.Location);
+        this.LocationsByid = this.Bin.Location;
+        this.EditBin();
+        return;
+      }
       api
         .get("/Location/" + this.LocationId)
         .then(response => {
           this.LocationsByid = response.data;
-          console.log(response.data);
           if (Status) {
             this.postBin();
           } else {
@@ -297,8 +381,10 @@ export default {
         });
     },
     postBin() {
-      console.log("postBin");
-
+      if (this.Name == null || this.Name == "") {
+        alert("Please enter your name Trash.");
+        return;
+      }
       var data = {
         Name: this.Name,
         State: 0,
@@ -310,7 +396,7 @@ export default {
           lon: this.LocationsByid.lon
         }
       };
-      console.log(data);
+
       api
         .post("/SmartBin", data, {
           headers: {
@@ -319,15 +405,16 @@ export default {
         })
         .then(response => {
           console.log(response);
+          alert("Successfully add trash.");
           this.cancel();
         });
     },
     Delete(BinId) {
-      console.log("Delete");
       api
         .delete("/SmartBin/" + BinId)
         .then(response => {
           console.log(response);
+          alert("Successfully Delete trash.");
           this.cancel();
         })
         .catch(e => {
@@ -341,7 +428,17 @@ export default {
       this.EditDialog = true;
     },
     EditBin() {
-      console.log("EditBin");
+      if (this.EditName == null || this.EditName == "") {
+        alert("Please enter your name Trash.");
+        return;
+      }
+      if (
+        this.EditName == this.Bin.Name &&
+        this.LocationsByid._id == this.Bin.Location._id
+      ) {
+        alert("Trash data has not changed.");
+        return;
+      }
       api
         .put(
           "/SmartBin/" + this.Bin.Name,
@@ -365,8 +462,31 @@ export default {
         )
         .then(response => {
           console.log(response);
+          alert("Successfully Edit trash.");
           this.cancel();
         });
+    },
+    search() {
+      if (this.SearchName == "" || this.SearchName == null) {
+        this.show = true;
+        this.SearchName = null;
+        alert("Please enter your member name.");
+        return;
+      }
+      this.i = 0;
+      while (this.i < this.Bins.length) {
+        if (this.Bins[this.i].Name == this.SearchName) {
+          this.Searchs = this.Bins[this.i];
+          this.show = false;
+          break;
+        }
+        this.i++;
+      }
+      if (this.i == this.Bins.length) {
+        this.show = true;
+        this.SearchName = null;
+        alert("Not found.");
+      }
     },
     cancel() {
       window.location.reload();

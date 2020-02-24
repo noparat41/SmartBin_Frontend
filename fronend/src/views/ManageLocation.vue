@@ -4,7 +4,7 @@
     <v-col>
       <v-data-table :headers="headers" :items="Locations" sort-by="calories" class="elevation-1">
         <template v-slot:top>
-          <v-toolbar flat color="#E0E0E0" >
+          <v-toolbar flat color="#E0E0E0">
             <v-toolbar-title>Manage Location</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
@@ -88,7 +88,7 @@ export default {
       Locationlat: "",
       Locations: [],
       LocationId: "",
-
+      Location: [],
       dialogs: false,
       headers: [
         { value: "", sortable: false },
@@ -124,16 +124,51 @@ export default {
   methods: {
     /* eslint-disable no-console */
     getLocation() {
-      console.log("getLocation");
       api
         .get("/Location")
         .then(response => {
           this.Locations = response.data;
-          console.log(response.data);
         })
         .catch(e => {
           console.log(e);
         });
+    },
+
+    Check(Status) {
+      if (
+        (this.LocationName == null || this.LocationName == "") &&
+        (this.Locationlon == null || this.Locationlon == "") &&
+        (this.Locationlat == null || this.Locationlat == "")
+      ) {
+        alert("Please fill out all information before adding location.");
+        return true;
+      } else if (this.LocationName == null || this.LocationName == "") {
+        if (this.Locationlon == null || this.Locationlon == "")
+          alert("Please enter your name and lon location.");
+        else if (this.Locationlat == null || this.Locationlat == "")
+          alert("Please enter your name and lat location.");
+        else alert("Please enter your name location.");
+        return true;
+      } else if (this.Locationlon == null || this.Locationlon == "") {
+        if (this.Locationlat == null || this.Locationlat == "")
+          alert("Please enter your lon and lat location.");
+        else alert("Please enter your lon location.");
+        return true;
+      } else if (this.Locationlat == null || this.Locationlat == "") {
+        alert("Please enter your lat location.");
+        return true;
+      }
+      if (Status) {
+        if (
+          this.LocationName == this.Location.Name &&
+          this.Locationlon == this.Location.lon &&
+          this.Locationlat == this.Location.lat
+        ) {
+          alert("Location data has not changed.");
+          return true;
+        }
+      }
+      return false;
     },
     post() {
       this.Status = true;
@@ -142,8 +177,9 @@ export default {
       this.Locationlat = "";
     },
     postLocation() {
-      console.log("postLocation");
-
+      if (this.Check(false)) {
+        return;
+      }
       var data = {
         Name: this.LocationName,
         lon: this.Locationlon,
@@ -158,15 +194,16 @@ export default {
         })
         .then(response => {
           console.log(response);
+          alert("Successfully add location.");
           this.cancel();
         });
     },
     Delete(Id) {
-      console.log("Delete");
       api
         .delete("/Location/" + Id)
         .then(response => {
           console.log(response);
+          alert("Successfully Delete location.");
           this.cancel();
         })
         .catch(e => {
@@ -174,6 +211,7 @@ export default {
         });
     },
     Edit(Location) {
+      this.Location = Location;
       this.LocationId = Location._id;
       this.LocationName = Location.Name;
       this.Locationlon = Location.lon;
@@ -182,16 +220,17 @@ export default {
       this.dialogs = true;
     },
     EditLocation() {
-      console.log("EditLocation");
-      console.log(this.LocationId);
+      if (this.Check(true)) {
+        return;
+      }
       api
         .put(
           "/Location/" + this.LocationId,
           {
-              _id: this.LocationId,
-              Name: this.LocationName,
-              lat: this.Locationlat,
-              lon: this.Locationlon
+            _id: this.LocationId,
+            Name: this.LocationName,
+            lat: this.Locationlat,
+            lon: this.Locationlon
           },
           {
             headers: {
@@ -201,6 +240,7 @@ export default {
         )
         .then(response => {
           console.log(response);
+          alert("Successfully edit location.");
           this.cancel();
         });
     },
