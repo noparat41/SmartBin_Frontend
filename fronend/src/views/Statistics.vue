@@ -2,6 +2,29 @@
   <v-app>
     <Navbar />
     <v-container class="pa-4 text-center">
+       <v-card-text v-if="Bar==false">
+        <v-row>
+          <v-spacer />
+          <v-btn dark fab color="pink" @click="Bar=true">
+            <v-icon size="30">chevron_left</v-icon>
+          </v-btn>
+        </v-row>
+      </v-card-text>
+
+      <v-toolbar color="#aaaaaa" dark v-if="Bar==true">
+        <v-spacer />
+        <v-col cols="12" sm="8" md="6">
+          <v-text-field solo-inverted flat hide-details label="Search" />
+        </v-col>
+        <v-btn dark icon @click="$router.push('/Status')">
+          <v-icon size="30">search</v-icon>
+        </v-btn>
+        <v-spacer />
+        <v-btn dark fab @click="Bar=false" icon>
+          <v-icon size="30">chevron_right</v-icon>
+        </v-btn>
+      </v-toolbar>
+
       <v-row class="fill-height" align="center" justify="center">
         <template v-for="(item, i) in Users">
           <v-col :key="i" cols="12" md="4">
@@ -15,8 +38,8 @@
                     <v-avatar size="80" v-if="item.Photo==null || item.Photo ==''">
                       <v-icon size="80">account_circle</v-icon>
                     </v-avatar>
-                     <v-avatar size="80" v-else>
-                       <v-img  :src="item.Photo"></v-img>
+                    <v-avatar size="80" v-else>
+                      <v-img :src="item.Photo"></v-img>
                     </v-avatar>
 
                     <h5>Point : {{item.Point}}</h5>
@@ -66,8 +89,9 @@ export default {
   },
   data() {
     return {
+      Bar: "",
       Users: [],
-      Image: "",
+      Image: ""
     };
   },
   methods: {
@@ -79,7 +103,6 @@ export default {
         .then(response => {
           this.Users = response.data;
           console.log(this.Users);
-         
         })
         .catch(e => {
           console.log(e);

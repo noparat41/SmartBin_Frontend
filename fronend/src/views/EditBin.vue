@@ -96,7 +96,8 @@ export default {
     LocationId: "",
     Bins: [],
     BinId: "",
-    LocationsByid: []
+    LocationsByid: [],
+    BinByid: []
   }),
   methods: {
     /* eslint-disable no-console */
@@ -138,7 +139,20 @@ export default {
           console.log(e);
         });
     },
+    getBinByid() {
+      console.log("getBinByid");
 
+      api
+        .get("/Smart/" + this.BinId)
+        .then(response => {
+          this.BinByid = response.data;
+          console.log(response.data);
+          this.putBin();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
     putBin() {
       console.log(this.BinId);
       api

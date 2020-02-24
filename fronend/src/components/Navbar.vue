@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar app clipped-left color="#F4511E" dark >
-      <v-col sm="3">
+      <v-col sm="5">
         <v-col>
           <v-col>
             <h1>
@@ -13,15 +13,10 @@
       </v-col>
       <v-spacer />
 
-      <v-text-field solo-inverted flat hide-details label="Search" />
-      <v-btn dark icon @click="$router.push('/Status')">
-        <v-icon size="30">search</v-icon>
-      </v-btn>
-
-      <v-spacer />
       <v-btn dark icon small @click="$router.push('/Status')">
         <v-icon size="30">notifications</v-icon>
       </v-btn>
+      
       <td v-if="status != 0">
         <tr>
           <td />
@@ -140,8 +135,8 @@ export default {
   data() {
     return {
       items: [
-        { icon: "dashboard", title: "Trash Status", route: "/Status" },
-        { icon: "delete", title: "Manage Trash", route: "/AddBin" },
+        { icon: "dashboard", title: "Manage Trash", route: "/ManageTrash" },
+        { icon: "delete", title: "Manage Location", route: "/AddBin" },
         { icon: "my_location", title: "Map", route: "/Map" },
         { icon: "bar_chart", title: "Statistics", route: "/Statistics" }
       ],
