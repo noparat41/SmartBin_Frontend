@@ -99,7 +99,9 @@
 
       <v-dialog v-model="AddDialog" max-width="600">
         <v-card align="center" justify="center" dark>
-          <br />
+          <br/>
+          <h2>Add Trash</h2>
+
           <v-col class="d-flex" cols="12" sm="5">
             <v-text-field label="Name" v-model="Name" :rules="[(v) => !!v || 'Item is required']"></v-text-field>
           </v-col>
@@ -133,9 +135,16 @@
       <v-dialog v-model="EditDialog" max-width="600">
         <v-card align="center" justify="center" dark>
           <br />
-          <br />
-          <h3>{{Bin.Name}}</h3>
-          <br />
+          <h2>Edit Trash</h2>
+
+          <v-col class="d-flex" cols="12" sm="5">
+            <v-text-field
+              label="Name"
+              v-model="EditName"
+              :rules="[(v) => !!v || 'Item is required']"
+            ></v-text-field>
+          </v-col>
+
           <v-col class="d-flex" cols="12" sm="4">
             <v-select
               :items="Locations"
@@ -178,6 +187,7 @@ export default {
       Bar: false,
       LocationId: "",
       Name: "",
+      EditName: "",
       AddDialog: false,
       EditDialog: false,
       Bins: [],
@@ -327,6 +337,7 @@ export default {
 
     Edit(Bin) {
       this.Bin = Bin;
+      this.EditName = Bin.Name;
       this.EditDialog = true;
     },
     EditBin() {
@@ -335,7 +346,7 @@ export default {
         .put(
           "/SmartBin/" + this.Bin.Name,
           {
-            Name: this.Bin.Name,
+            Name: this.EditName,
             State: this.Bin.State,
             Status: this.Bin.Status,
             Image: this.Bin.Image,

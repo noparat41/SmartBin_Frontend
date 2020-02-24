@@ -12,29 +12,31 @@
                 <v-col class="text-center" md="mx-auto">
                   <v-col cols="12" sm="3"></v-col>
                   <v-row class="justify-center">
-                    <v-icon size="50" color="#F4511E">account_circle</v-icon>
+                    <v-avatar size="120">
+                      <v-img src="../assets/SmartBin.jpg"></v-img>
+                    </v-avatar>
                     <v-card-text>
-                      <h1>
-                        <span>Smart</span>
-                        <span class="font-weight-light">Bin</span>
-                      </h1>
                       <br />
-                  <v-col>
+                      <h2>
+                        <span>Login</span>
+                      </h2>
                       
                       <v-col>
-                        <v-row class="justify-center">
-                          <v-btn color="#f32c25" dark block>
-                            <button @click="socialGoogleLogin">Log in with Gmail</button>
-                          </v-btn>
-                        </v-row>
+                        <v-col>
+                          <v-row class="justify-center">
+                            <v-btn color="#f32c25" dark block>
+                              <button @click="socialGoogleLogin">Log in with Gmail</button>
+                            </v-btn>
+                          </v-row>
+                        </v-col>
+                        <v-col>
+                          <v-row class="justify-center">
+                            <v-btn color="#4267B2" dark block>
+                              <button @click="socialFacecbookLogin">Log in with Facebook</button>
+                            </v-btn>
+                          </v-row>
+                        </v-col>
                       </v-col>
-                      <v-col>
-                        <v-row class="justify-center">
-                          <v-btn color="#4267B2" dark block>
-                            <button @click="socialFacecbookLogin">Log in with Facebook</button>
-                          </v-btn>
-                        </v-row>
-                      </v-col></v-col>
                     </v-card-text>
                   </v-row>
                 </v-col>

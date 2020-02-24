@@ -27,7 +27,7 @@
 
                     <v-card height="mx-auto" width="250" dark>
                       <v-list>
-                        <v-list-item @click="$router.push('/Status')">
+                        <v-list-item @click="$router.push('/ManageTrash')">
                           <v-col id="H1" class="8">
                             <v-icon>home</v-icon>
                           </v-col>

@@ -3,9 +3,7 @@ import Router from 'vue-router';
 import Login from "../components/Login.vue";
 
 import ManageTrash from "../views/ManageTrash.vue";
-import AddBin from "../views/AddBin.vue";
-import EditBin from "../views/EditBin.vue";
-import DeleteBin from "../views/DeleteBin.vue";
+import ManageLocation from "../views/ManageLocation.vue";
 import Map from "../views/Map.vue";
 import Statistics from "../views/Statistics.vue";
 
@@ -36,25 +34,9 @@ let router = new Router({
       }
     },
     {
-      path: '/AddBin',
-      name: 'AddBin',
-      component: AddBin,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/EditBin',
-      name: 'EditBin',
-      component: EditBin,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/DeleteBin',
-      name: 'DeleteBin',
-      component: DeleteBin,
+      path: '/ManageLocation',
+      name: 'ManageLocation',
+      component: ManageLocation,
       meta: {
         requiresAuth: true
       }

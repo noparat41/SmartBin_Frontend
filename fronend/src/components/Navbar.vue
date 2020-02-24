@@ -13,7 +13,7 @@
       </v-col>
       <v-spacer />
 
-      <v-btn dark icon small @click="$router.push('/Status')">
+      <v-btn dark icon small @click="$router.push('/ManageTrash')">
         <v-icon size="30">notifications</v-icon>
       </v-btn>
       
@@ -28,7 +28,8 @@
           <v-icon></v-icon>
         </tr>
       </td>
-      <v-avatar size="20" />
+      <v-divider class="mx-4" inset vertical></v-divider>
+      
 
       <v-avatar size="30" v-if="Staffs.Image==null || Staffs.Image=='' ">
         <v-icon size="35">account_circle</v-icon>
@@ -67,7 +68,7 @@
       </v-menu>
     </v-app-bar>
 
-    <v-navigation-drawer app clipped left dark>
+    <v-navigation-drawer app clipped left dark color="#616161">
       <v-col>
         <v-col>
           <v-col align="center">
@@ -135,8 +136,8 @@ export default {
   data() {
     return {
       items: [
-        { icon: "dashboard", title: "Manage Trash", route: "/ManageTrash" },
-        { icon: "delete", title: "Manage Location", route: "/AddBin" },
+        { icon: "delete", title: "Manage Trash", route: "/ManageTrash" },
+        { icon: "terrain", title: "Manage Location", route: "/ManageLocation" },
         { icon: "my_location", title: "Map", route: "/Map" },
         { icon: "bar_chart", title: "Statistics", route: "/Statistics" }
       ],
