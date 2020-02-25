@@ -202,7 +202,7 @@ export default {
           "/Staff/" + firebase.auth().currentUser.uid,
           {
             Uid: firebase.auth().currentUser.uid,
-            Image: null,
+            Image: this.Image,
             Id: this.Id,
             Ids: this.Ids,
             NickName: this.UserName,

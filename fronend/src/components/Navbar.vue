@@ -38,8 +38,9 @@
         <v-img :src="Staffs.Image"></v-img>
       </v-avatar>
 
-      <v-btn dark text small @click="$router.push('/Profile')">
-        <span>{{Staffs.NickName}}</span>
+      <v-btn dark text small @click="$router.push('/Profile')" >
+        <span v-if="Staffs.NickName!=null || Staffs.NickName!=''">{{Staffs.NickName}}</span>
+        <span v-if="Staffs.NickName==null || Staffs.NickName==''">{{Staffs.Email}}</span>
       </v-btn>
 
       <v-menu bottom left transition="slide-y-transition">
@@ -178,7 +179,6 @@ export default {
       dialog: false,
       drawerRight: false,
       isLoggedIn: false,
-      currentUser: "",
       Image: "",
       Staffs: [],
       Users: [],
