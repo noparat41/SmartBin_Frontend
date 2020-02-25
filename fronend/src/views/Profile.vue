@@ -3,7 +3,7 @@
     <v-content>
       <div
         class="img-background"
-        v-bind:style="{'background-image': 'url(' + require('../assets/Background.jpg') + ')'}"
+        v-bind:style="{'background-image': 'url(' + require('../assets/background.jpg') + ')'}"
       >
         <br />
         <br />
