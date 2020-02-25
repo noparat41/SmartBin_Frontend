@@ -7,14 +7,14 @@ import firebase from 'firebase';
 Vue.config.productionTip = false
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBvkDZL-AQ1SeH4ktVJSO185fDtrLI8-VU",
-  authDomain: "smartbin-95f7a.firebaseapp.com",
-  databaseURL: "https://smartbin-95f7a.firebaseio.com",
-  projectId: "smartbin-95f7a",
-  storageBucket: "smartbin-95f7a.appspot.com",
-  messagingSenderId: "311706871587",
-  appId: "1:311706871587:web:9e99bb186f391d6f490e96",
-  measurementId: "G-GSGE1Q9D9T"
+    apiKey: "AIzaSyBvkDZL-AQ1SeH4ktVJSO185fDtrLI8-VU",
+    authDomain: "smartbin-95f7a.firebaseapp.com",
+    databaseURL: "https://smartbin-95f7a.firebaseio.com",
+    projectId: "smartbin-95f7a",
+    storageBucket: "smartbin-95f7a.appspot.com",
+    messagingSenderId: "311706871587",
+    appId: "1:311706871587:web:a22127d2eb1cabe4490e96",
+    measurementId: "G-E8BRHX40ZC"
 };
 
 firebase.initializeApp(firebaseConfig);
