@@ -70,18 +70,19 @@
 
           <v-container fluid>
             <v-row dense>
-              <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+              <v-col v-for="card in cards" :key="card.title" :cols="card.flex" align="center">
                 <v-card v-show="card.Status == true">
                   <v-card-text>
                     <br />
-                    <v-col align="center" v-if="Image==null">
+
+                    <v-col v-if="status">
                       <v-avatar size="150">
-                        <v-icon size="200">account_circle</v-icon>
+                        <v-img :src="Image"></v-img>
                       </v-avatar>
                     </v-col>
-                    <v-col align="center" v-else>
-                      <v-avatar size="160">
-                        <v-img :src="Image"></v-img>
+                    <v-col v-if="!status">
+                      <v-avatar size="150">
+                        <v-icon size="180" color="#F4511E">account_circle</v-icon>
                       </v-avatar>
                     </v-col>
                     <v-col>
@@ -149,7 +150,8 @@ export default {
       SurName: "",
       Email: "",
       Phone: "",
-      Image: ""
+      Image: "",
+      status: false
     };
   },
 
@@ -168,6 +170,10 @@ export default {
           this.Email = this.Staffs.Email;
           this.Image = this.Staffs.Image;
           this.Phone = this.Staffs.Phone;
+          if (this.Image.toString() !== "") {
+            this.status = true;
+          }
+    
         })
         .catch(e => {
           console.log(e);

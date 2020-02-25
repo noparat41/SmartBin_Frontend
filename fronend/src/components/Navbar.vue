@@ -30,17 +30,14 @@
       </td>
       <v-divider class="mx-4" inset vertical></v-divider>
 
-      <v-avatar size="30" v-if="Staffs.Image==null || Staffs.Image=='' ">
-        <v-icon size="35">account_circle</v-icon>
-      </v-avatar>
-
-      <v-avatar size="30" v-else>
-        <v-img :src="Staffs.Image"></v-img>
+      <v-avatar size="30">
+        <v-img :src="Staffs.Image" v-if="shows"></v-img>
+        <v-icon size="35" v-if="!shows">account_circle</v-icon>
       </v-avatar>
 
       <v-btn dark text small @click="$router.push('/Profile')" >
-        <span v-if="Staffs.NickName!=null || Staffs.NickName!=''">{{Staffs.NickName}}</span>
-        <span v-if="Staffs.NickName==null || Staffs.NickName==''">{{Staffs.Email}}</span>
+        <span v-if="show">{{Staffs.NickName}}</span>
+        <span v-if="!show">{{Staffs.Email}}</span>
       </v-btn>
 
       <v-menu bottom left transition="slide-y-transition">
@@ -176,6 +173,7 @@ export default {
       PercentBadBin: 0,
       messages: 0,
       show: false,
+      shows: false,
       dialog: false,
       drawerRight: false,
       isLoggedIn: false,
@@ -217,6 +215,9 @@ export default {
         .get("/Staff/" + firebase.auth().currentUser.uid)
         .then(response => {
           this.Staffs = response.data;
+          if (this.Staffs.Image.toString() !== "") {
+            this.shows = true;
+          }
         })
         .catch(e => {
           console.log(e);
