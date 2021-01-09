@@ -36,8 +36,9 @@
       </v-avatar>
 
       <v-btn dark text small @click="$router.push('/Profile')" >
-        <span v-if="show">{{Staffs.NickName}}</span>
-        <span v-if="!show">{{Staffs.Email}}</span>
+        <span v-if="Staffs.NickName == '' || Staffs.NickName == null">{{Staffs.Email}}</span>
+        <span v-else >{{Staffs.NickName}}</span>
+        
       </v-btn>
 
       <v-menu bottom left transition="slide-y-transition">
@@ -172,7 +173,7 @@ export default {
       PercentGoodBin: 0,
       PercentBadBin: 0,
       messages: 0,
-      show: false,
+     
       shows: false,
       dialog: false,
       drawerRight: false,
