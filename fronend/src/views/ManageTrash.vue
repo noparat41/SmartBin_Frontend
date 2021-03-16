@@ -310,7 +310,7 @@ export default {
         this.State = 0;
         this.Status = Abin.Status;
       } else {
-        this.State = Abin.Status;
+        this.State = this.State;
         this.Status = 0;
       }
       api
